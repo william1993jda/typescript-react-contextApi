@@ -1,13 +1,12 @@
-import { useNavigate } from 'react-router-dom'
-import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
+import { useCallback, useState, useRef } from 'react'
 import { InputLogin } from './components/InputLogin'
 import { ButtonLogin } from './components/ButtonLogin'
+import { useUsuarioLogado } from '../../shared/hooks'
 
 export const Login = () => {
     const inputSenhaRef = useRef<HTMLInputElement>(null)
     const inputEmailRef = useRef<HTMLInputElement>(null)
-
-    const history = useNavigate();
+    const { nomeDoUsuario } = useUsuarioLogado();
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 
@@ -35,7 +34,8 @@ export const Login = () => {
     // }, [senha])
 
     // useCallback é uma função que vai ficar computada na memoria, 
-    // guarda os valores em memoria, ou seja, o react não vai reconstruir essa função toda vez que for renderizado
+    // guarda os valores em memoria, ou seja, o react não vai reconstruir 
+    // essa função toda vez que for renderizado
 
     const handleEntrar = useCallback(() => {
         console.log(email, senha)
@@ -43,14 +43,11 @@ export const Login = () => {
         setSenha('')
     }, [email, senha])
 
-    const handleVoltar = () => {
-        history('/')
-    }
-
     return (
         <div className='d-flex justify-content-center w-100 align-items-center' style={{ height: '50vh' }}>
             <form style={{ maxWidth: '80%', width: '40%' }}>
                 <p>Quantidade de caracters no e-mail: {email.length}</p>
+                <p><strong>{nomeDoUsuario}</strong></p>
                 <InputLogin
                     htmlFor='email'
                     id='email'
@@ -77,9 +74,6 @@ export const Login = () => {
                 <div className="d-flex justify-content-between">
                     <ButtonLogin className='btn btn-primary' onClick={handleEntrar} type='button'>Entrar</ButtonLogin>
                     <ButtonLogin className='btn btn-success' onClick={handleEntrar} type='button'>Cadastre-se</ButtonLogin>
-
-                    {/* <button type='button' className='btn btn-secondary' onClick={handleVoltar}>Voltar</button>
-                    <button type='button' className='btn btn-primary' onClick={handleEntrar}>Entrar</button> */}
                 </div>
             </form>
         </div>
